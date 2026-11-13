@@ -217,9 +217,33 @@
   <section id="work">
     <div class="wrap">
       <h2>Selected work</h2>
-      <p class="intro">Systems built for the problems I see most in small businesses: messages that go unanswered, orders handled by hand, and leads nobody follows up.</p>
+      <p class="intro">Systems built for the problems I see most in small businesses: payments nobody can match to invoices, messages that go unanswered, orders handled by hand, and leads nobody follows up.</p>
 
       <article class="flagship">
+        <div>
+          <h3>PayMatch</h3>
+          <p>Nigerian businesses are paid by bank transfer, and the statement says things like "NIP TRF FRM ADEBAYO OLUWASEUN", never which invoice was paid. Accounts staff spend hours matching payments by hand, and mistakes mean chasing customers who already paid. PayMatch reads the bank statement and invoice list, matches payments to invoices, sends only the unclear ones to a person, and drafts reminders for what's genuinely overdue.</p>
+          <ul>
+            <li>Handles owners paying from personal accounts, typos, one transfer covering several invoices, part payments and overpayments</li>
+            <li>Only applies a payment by itself when it's certain: zero wrong automatic matches, and the build fails if that ever changes</li>
+            <li>AI (Groq) is asked only about the unclear cases, can only choose from a shortlist, and a person confirms every AI suggestion</li>
+            <li>Won't send a reminder to a customer whose payment is already waiting for review. 58 automated tests</li>
+          </ul>
+          <ul class="stack" aria-label="Built with">
+            <li>Python</li><li>FastAPI</li><li>Groq</li><li>SQLite</li><li>Docker</li><li>GitHub Actions</li>
+          </ul>
+          <div class="links">
+            <a href="https://paymatch-nhk8.onrender.com">Try the live demo</a>
+            <a href="https://github.com/MartinezYT/paymatch">Read the code</a>
+          </div>
+        </div>
+        <figure>
+          <img src="assets/paymatch-dashboard.png" alt="PayMatch dashboard: payments received, share reconciled, matched automatically, waiting for review and overdue totals, with a chart of debts by age and the biggest balances" width="1280" height="760" loading="lazy">
+          <figcaption>The overview: how much has been reconciled, what's waiting for review, and who owes what.</figcaption>
+        </figure>
+      </article>
+
+      <article class="flagship" style="margin-top:72px">
         <div>
           <h3>Inbox-to-Action</h3>
           <p>A busy small business can get a hundred messages a day across email, its website and WhatsApp, and someone spends hours just sorting them. Inbox-to-Action reads each message, decides whether it's a lead, a support issue, a payment or spam, pulls out who sent it, how urgent it is and any amount in naira, then drafts a reply and alerts the team.</p>
