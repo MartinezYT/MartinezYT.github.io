@@ -132,6 +132,36 @@
   .ledger dt { font-weight: 700; }
   .ledger dd { margin: 0; color: var(--steel); }
 
+
+  /* n8n workflows */
+  .wf-feature { background: var(--panel); border: 2px solid var(--ink); border-radius: 6px; padding: 28px; margin-bottom: 28px; }
+  .wf-head { max-width: 46em; }
+  .wf-head h3, .wf-card h3 { margin: 0 0 8px; font-size: 22px; font-weight: 800; font-variation-settings: "wdth" 110; }
+  .wf-head p { margin: 0 0 24px; color: var(--steel); }
+  .flow { list-style: none; margin: 0 0 22px; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 28px; }
+  .node { position: relative; border: 1.5px solid var(--rule); border-radius: 6px; padding: 12px 12px 14px; background: var(--paper); }
+  .node::after { content: ""; position: absolute; top: 50%; right: -24px; width: 20px; height: 2px; background: var(--ink); }
+  .node::before { content: ""; position: absolute; top: calc(50% - 5px); right: -25px; border: 6px solid transparent; border-left: 8px solid var(--ink); border-right: 0; }
+  .node:last-child::after, .node:last-child::before { display: none; }
+  .node .kind { display: block; font-size: 12px; color: var(--steel); }
+  .node b { display: block; font-size: 15px; margin: 2px 0 4px; }
+  .node .what { display: block; font-size: 13px; color: var(--steel); line-height: 1.35; }
+  .node.trigger { border-color: var(--ink); }
+  .node.ai { border-color: var(--signal); background: #FFF6D6; }
+  @media (max-width: 1000px) {
+    .flow { grid-template-columns: 1fr; gap: 22px; max-width: 420px; }
+    .node::after { top: auto; bottom: -19px; right: auto; left: 24px; width: 2px; height: 16px; }
+    .node::before { top: auto; bottom: -21px; right: auto; left: 19px; border: 6px solid transparent; border-top: 8px solid var(--ink); border-bottom: 0; }
+  }
+  .wf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .wf-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .wf-grid { grid-template-columns: 1fr; } .wf-feature { padding: 20px; } }
+  .wf-card { background: var(--panel); border: 1.5px solid var(--rule); border-radius: 6px; padding: 20px; display: flex; flex-direction: column; }
+  .wf-card h3 { font-size: 19px; }
+  .wf-card p { margin: 0 0 16px; color: var(--steel); flex: 1; }
+  .wf-card .stack { margin: 0; }
+  .wf-more { background: transparent; border-style: dashed; }
+
   /* method: a real sequence */
   .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; counter-reset: step; border: 2px solid var(--ink); border-radius: 6px; background: var(--panel); }
   @media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
@@ -174,6 +204,7 @@
   <a class="name" href="#top">Martin Emeka</a>
   <nav aria-label="Sections">
     <a href="#work">Work</a>
+    <a href="#n8n">n8n workflows</a>
     <a href="#method">How I work</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
@@ -282,16 +313,64 @@
         </div>
       </article>
 
-      <div class="ledger">
-        <h3>Other workflows</h3>
-        <p>Smaller automations I've built and written about, mostly in n8n with Claude.</p>
-        <dl>
-          <div class="row"><dt>CV screening</dt><dd>Reads incoming job applications, scores them against the role and shortlists the best fits, so recruiters stop reading hundreds of CVs by hand.</dd></div>
-          <div class="row"><dt>Lead follow-up</dt><dd>Keeps in touch with new leads on a schedule, so nobody goes cold just because a follow-up was forgotten.</dd></div>
-          <div class="row"><dt>Instant customer replies</dt><dd>Replies to new enquiries within minutes, because a slow first reply often loses the sale.</dd></div>
-          <div class="row"><dt>Form response processing</dt><dd>Turns hundreds of Google Form responses into organised records and next steps, without anyone copying and pasting.</dd></div>
-          <div class="row"><dt>Exchange rate alerts</dt><dd>Sends the rates a business cares about on a schedule, so nobody has to keep checking several apps.</dd></div>
-        </dl>
+    </div>
+  </section>
+
+  <section id="n8n">
+    <div class="wrap">
+      <h2>n8n workflows</h2>
+      <p class="intro">Most automation work doesn't need a custom app. These are workflows built in n8n, usually with an AI step, that connect the tools a business already uses.</p>
+
+      <article class="wf-feature">
+        <div class="wf-head">
+          <h3>Inbox triage pipeline</h3>
+          <p>Every email and website or WhatsApp message goes through the same path: it's cleaned up, sorted by AI, logged to a sheet, and sales leads get a reply drafted in Gmail, ready to send.</p>
+        </div>
+        <ol class="flow" aria-label="Workflow steps">
+          <li class="node trigger"><span class="kind">Trigger</span><b>Gmail or webhook</b><span class="what">new email, form or WhatsApp message</span></li>
+          <li class="node"><span class="kind">Set</span><b>Normalise</b><span class="what">sender, subject, body, channel</span></li>
+          <li class="node ai"><span class="kind">HTTP request</span><b>AI triage</b><span class="what">category, urgency, amount, reply</span></li>
+          <li class="node"><span class="kind">Google Sheets</span><b>Log it</b><span class="what">one row per message</span></li>
+          <li class="node"><span class="kind">If</span><b>Is it a lead?</b><span class="what">only sales leads continue</span></li>
+          <li class="node"><span class="kind">Gmail</span><b>Draft reply</b><span class="what">waiting in Drafts to approve</span></li>
+        </ol>
+        <div class="links">
+          <a href="https://github.com/MartinezYT/inbox-to-action/blob/main/n8n/workflow.json">Get the workflow file</a>
+          <a href="https://github.com/MartinezYT/inbox-to-action#n8n-workflow">How to import it</a>
+        </div>
+      </article>
+
+      <div class="wf-grid">
+        <article class="wf-card">
+          <h3>CV screening</h3>
+          <p>Reads incoming job applications, scores each one against the role and shortlists the best fits, so recruiters stop reading hundreds of CVs by hand.</p>
+          <ul class="stack" aria-label="Built with"><li>n8n</li><li>AI</li></ul>
+        </article>
+        <article class="wf-card">
+          <h3>Lead follow-up</h3>
+          <p>Keeps in touch with new leads on a schedule, so nobody goes cold just because a follow-up was forgotten.</p>
+          <ul class="stack" aria-label="Built with"><li>n8n</li><li>AI</li></ul>
+        </article>
+        <article class="wf-card">
+          <h3>Instant customer replies</h3>
+          <p>Replies to new enquiries within minutes, because a slow first reply often loses the sale.</p>
+          <ul class="stack" aria-label="Built with"><li>n8n</li><li>AI</li></ul>
+        </article>
+        <article class="wf-card">
+          <h3>Form response processing</h3>
+          <p>Turns hundreds of Google Form responses into organised records and next steps, without anyone copying and pasting.</p>
+          <ul class="stack" aria-label="Built with"><li>n8n</li><li>Google Forms</li><li>Google Sheets</li></ul>
+        </article>
+        <article class="wf-card">
+          <h3>Exchange rate alerts</h3>
+          <p>Sends the rates a business cares about on a schedule, so nobody has to keep checking several apps.</p>
+          <ul class="stack" aria-label="Built with"><li>n8n</li><li>Schedule</li></ul>
+        </article>
+        <article class="wf-card wf-more">
+          <h3>See them in action</h3>
+          <p>I write up how each workflow works, and what it saves, on LinkedIn.</p>
+          <div class="links"><a href="https://www.linkedin.com/in/martin-vincent-8b3866269/recent-activity/all/">Read the posts</a></div>
+        </article>
       </div>
     </div>
   </section>
