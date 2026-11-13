@@ -224,13 +224,13 @@
           <h3>Inbox-to-Action</h3>
           <p>A busy small business can get a hundred messages a day across email, its website and WhatsApp, and someone spends hours just sorting them. Inbox-to-Action reads each message, decides whether it's a lead, a support issue, a payment or spam, pulls out who sent it, how urgent it is and any amount in naira, then drafts a reply and alerts the team.</p>
           <ul>
-            <li>Claude has to answer in a fixed JSON shape, so its output never breaks the rest of the system</li>
+            <li>The AI (Claude, or free Groq and Gemini models) has to answer in a fixed JSON shape, so its output never breaks the rest of the system</li>
             <li>If the AI service fails, a rules-based backup answers instead and the workflow keeps running</li>
-            <li>28 automated tests, plus a labelled message set that measures accuracy with a number</li>
+            <li>37 automated tests, and 96% accuracy on a labelled set of 24 real-world-style messages</li>
             <li>Runs in Docker with automatic checks on every push, and plugs into n8n, Google Sheets and Gmail</li>
           </ul>
           <ul class="stack" aria-label="Built with">
-            <li>Python</li><li>FastAPI</li><li>Claude API</li><li>n8n</li><li>SQLite</li><li>Docker</li><li>GitHub Actions</li>
+            <li>Python</li><li>FastAPI</li><li>Claude API</li><li>Groq</li><li>n8n</li><li>SQLite</li><li>Docker</li><li>GitHub Actions</li>
           </ul>
           <div class="links">
             <a href="https://github.com/MartinezYT/inbox-to-action">Read the code</a>
