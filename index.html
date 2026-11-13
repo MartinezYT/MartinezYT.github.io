@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Martin Emeka, AI Automation Developer</title>
+<meta name="description" content="Martin Emeka builds AI agents and automations with Python, Claude and n8n that take repetitive work off small businesses.">
+<meta property="og:title" content="Martin Emeka, AI Automation Developer">
+<meta property="og:description" content="AI agents and automations built with Python, Claude and n8n.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #E9EDF1;
+    --panel: #FFFFFF;
+    --ink: #13233A;
+    --steel: #55667A;
+    --rule: #C3CCD6;
+    --signal: #F0B400;
+    --signal-ink: #3A2C00;
+    --lead: #1F7A4D;
+    --support: #B4462A;
+    --payment: #2C5DA8;
+    --spam: #7A8594;
+    --measure: min(1120px, 100% - 48px);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Archivo", system-ui, sans-serif; font-variation-settings: "wdth" 100;
+    font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; border-radius: 2px; }
+  .wrap { width: var(--measure); margin-inline: auto; }
+
+  /* ---------- top bar ---------- */
+  .bar { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; }
+  .bar .name { font-weight: 800; font-variation-settings: "wdth" 115; letter-spacing: -0.01em; text-decoration: none; }
+  .bar nav { display: flex; gap: 22px; font-size: 15px; }
+  .bar nav a { text-decoration: none; color: var(--steel); }
+  .bar nav a:hover { color: var(--ink); }
+  @media (max-width: 620px) { .bar nav { display: none; } }
+
+  /* ---------- hero ---------- */
+  .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; padding: 56px 0 96px; }
+  @media (max-width: 960px) { .hero { grid-template-columns: 1fr; gap: 40px; padding-top: 24px; } }
+  .hero h1 {
+    margin: 0 0 22px; font-weight: 850; font-variation-settings: "wdth" 118;
+    font-size: clamp(38px, 5.4vw, 64px); line-height: 1.02; letter-spacing: -0.025em;
+  }
+  .hero p.lede { margin: 0 0 30px; font-size: 19px; color: var(--steel); max-width: 34em; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-block; padding: 13px 20px; border-radius: 4px; font-weight: 650; text-decoration: none;
+    border: 2px solid var(--ink); font-size: 16px;
+  }
+  .btn.primary { background: var(--ink); color: var(--paper); }
+  .btn.primary:hover { background: #0A1626; }
+  .btn.ghost:hover { background: var(--panel); }
+
+  /* ---------- the routing board (the one bold element) ---------- */
+  .board {
+    background: var(--panel); border: 2px solid var(--ink); border-radius: 6px;
+    box-shadow: 8px 8px 0 var(--ink); overflow: hidden;
+  }
+  .board-head {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 12px 16px; background: var(--signal); color: var(--signal-ink);
+    border-bottom: 2px solid var(--ink); font-weight: 700; font-size: 14px;
+  }
+  .board-head span:last-child { font-weight: 500; }
+  .incoming { padding: 18px 18px 14px; border-bottom: 1px dashed var(--rule); min-height: 148px; }
+  .incoming .from { font-size: 13px; color: var(--steel); margin-bottom: 6px; }
+  .incoming .msg { font-size: 16px; line-height: 1.45; }
+  .verdict { padding: 14px 18px 18px; min-height: 128px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .tag { font-size: 13px; font-weight: 650; padding: 3px 10px; border-radius: 3px; border: 1.5px solid currentColor; }
+  .tag.cat { color: var(--panel); border-color: transparent; }
+  .verdict .next { font-size: 14px; color: var(--steel); }
+  .lanes { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--ink); }
+  .lane { padding: 10px 12px; font-size: 13px; border-right: 1px solid var(--rule); }
+  .lane:last-child { border-right: 0; }
+  .lane b { display: block; font-size: 22px; font-variation-settings: "wdth" 112; line-height: 1.1; }
+  .lane.lit { background: #FFF6D6; }
+  .board-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--steel); }
+  .board-foot button {
+    font: inherit; font-weight: 650; color: var(--ink); background: none; border: 1.5px solid var(--ink);
+    border-radius: 3px; padding: 4px 10px; cursor: pointer;
+  }
+  .fade { transition: opacity .35s ease; }
+  .fade.out { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { .fade { transition: none; } }
+
+  /* ---------- sections ---------- */
+  section { padding: 88px 0; border-top: 2px solid var(--ink); }
+  h2 {
+    margin: 0 0 12px; font-weight: 800; font-variation-settings: "wdth" 115;
+    font-size: clamp(30px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.02em;
+  }
+  .intro { color: var(--steel); max-width: 38em; margin: 0 0 48px; font-size: 18px; }
+
+  /* flagship project */
+  .flagship { display: grid; grid-template-columns: 1fr 1.15fr; gap: 48px; align-items: start; }
+  @media (max-width: 960px) { .flagship { grid-template-columns: 1fr; } }
+  .flagship h3, .project h3 { margin: 0 0 10px; font-size: 26px; font-weight: 800; font-variation-settings: "wdth" 110; letter-spacing: -0.01em; }
+  .flagship p { margin: 0 0 16px; }
+  .flagship ul { margin: 0 0 22px; padding-left: 20px; }
+  .flagship li { margin-bottom: 8px; }
+  .stack { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 24px; padding: 0; list-style: none; }
+  .stack li { font-size: 13px; font-weight: 600; padding: 3px 9px; border: 1.5px solid var(--rule); border-radius: 3px; background: var(--panel); }
+  figure { margin: 0; }
+  figure img { width: 100%; height: auto; display: block; border: 2px solid var(--ink); border-radius: 6px; }
+  figcaption { font-size: 14px; color: var(--steel); margin-top: 10px; }
+  .links { display: flex; flex-wrap: wrap; gap: 18px; font-weight: 650; }
+  .links a { text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--signal); }
+
+  .project { margin-top: 72px; display: grid; grid-template-columns: 1fr 1.15fr; gap: 48px; }
+  @media (max-width: 960px) { .project { grid-template-columns: 1fr; gap: 16px; } }
+  .project p { margin: 0 0 16px; }
+
+  /* workflows: a ledger, not cards */
+  .ledger { margin-top: 72px; }
+  .ledger h3 { margin: 0 0 6px; font-size: 22px; font-weight: 800; font-variation-settings: "wdth" 110; }
+  .ledger > p { margin: 0 0 20px; color: var(--steel); }
+  .ledger dl { margin: 0; border-top: 1px solid var(--rule); }
+  .ledger .row { display: grid; grid-template-columns: 260px 1fr; gap: 24px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+  @media (max-width: 700px) { .ledger .row { grid-template-columns: 1fr; gap: 4px; } }
+  .ledger dt { font-weight: 700; }
+  .ledger dd { margin: 0; color: var(--steel); }
+
+  /* method: a real sequence */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; counter-reset: step; border: 2px solid var(--ink); border-radius: 6px; background: var(--panel); }
+  @media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+  .step { padding: 24px 22px; border-right: 1px solid var(--rule); }
+  .step:last-child { border-right: 0; }
+  @media (max-width: 900px) { .step { border-bottom: 1px solid var(--rule); } }
+  .step::before {
+    counter-increment: step; content: counter(step);
+    display: inline-grid; place-items: center; width: 30px; height: 30px; margin-bottom: 14px;
+    background: var(--signal); color: var(--signal-ink); font-weight: 800; border-radius: 50%;
+  }
+  .step h3 { margin: 0 0 6px; font-size: 19px; font-weight: 750; }
+  .step p { margin: 0; font-size: 15px; color: var(--steel); }
+
+  /* background */
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  @media (max-width: 860px) { .about { grid-template-columns: 1fr; gap: 32px; } }
+  .about p { margin: 0 0 16px; max-width: 34em; }
+  .facts { margin: 0; }
+  .facts div { padding: 14px 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 120px 1fr; gap: 16px; }
+  .facts div:first-child { border-top: 1px solid var(--rule); }
+  .facts dt { color: var(--steel); font-size: 15px; }
+  .facts dd { margin: 0; font-weight: 600; }
+
+  /* contact */
+  .contact { background: var(--ink); color: var(--paper); border-top: 0; }
+  .contact h2 { max-width: 16em; }
+  .contact p { color: #B9C4D0; max-width: 36em; margin: 0 0 28px; font-size: 18px; }
+  .contact .btn { border-color: var(--paper); }
+  .contact .btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
+  .contact .btn.primary:hover { background: #FFC61A; }
+  .contact .btn.ghost:hover { background: #1E3150; }
+  footer { background: var(--ink); color: #8C9AAB; font-size: 14px; padding: 24px 0 40px; }
+</style>
+</head>
+<body>
+
+<header class="wrap bar">
+  <a class="name" href="#top">Martin Emeka</a>
+  <nav aria-label="Sections">
+    <a href="#work">Work</a>
+    <a href="#method">How I work</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <h1>I build AI agents that handle the busywork between a business and its customers.</h1>
+      <p class="lede">AI automation developer in Nigeria, working in Python, Claude and n8n. I trained as a mechanical engineer, so I approach a business the way I'd approach a machine: find where it jams, then redesign that part.</p>
+      <div class="actions">
+        <a class="btn primary" href="#work">See my work</a>
+        <a class="btn ghost" href="https://github.com/MartinezYT">GitHub profile</a>
+      </div>
+    </div>
+
+    <div class="board" aria-label="Sample messages being sorted by Inbox-to-Action">
+      <div class="board-head"><span>Inbox-to-Action</span><span id="counter">Message 1 of 5</span></div>
+      <div class="incoming fade" id="incoming" aria-live="polite">
+        <div class="from" id="from"></div>
+        <div class="msg" id="msg"></div>
+      </div>
+      <div class="verdict fade" id="verdict">
+        <div class="tags" id="tags"></div>
+        <div class="next" id="next"></div>
+      </div>
+      <div class="lanes" aria-label="Messages sorted so far">
+        <div class="lane" data-lane="lead">Leads<b id="n-lead">0</b></div>
+        <div class="lane" data-lane="support">Support<b id="n-support">0</b></div>
+        <div class="lane" data-lane="payment">Payments<b id="n-payment">0</b></div>
+        <div class="lane" data-lane="spam">Spam<b id="n-spam">0</b></div>
+      </div>
+      <div class="board-foot">
+        <span>Sample messages and the decisions the agent made</span>
+        <button type="button" id="pause" aria-pressed="false">Pause</button>
+      </div>
+    </div>
+  </div>
+
+  <section id="work">
+    <div class="wrap">
+      <h2>Selected work</h2>
+      <p class="intro">Systems built for the problems I see most in small businesses: messages that go unanswered, orders handled by hand, and leads nobody follows up.</p>
+
+      <article class="flagship">
+        <div>
+          <h3>Inbox-to-Action</h3>
+          <p>A busy small business can get a hundred messages a day across email, its website and WhatsApp, and someone spends hours just sorting them. Inbox-to-Action reads each message, decides whether it's a lead, a support issue, a payment or spam, pulls out who sent it, how urgent it is and any amount in naira, then drafts a reply and alerts the team.</p>
+          <ul>
+            <li>Claude has to answer in a fixed JSON shape, so its output never breaks the rest of the system</li>
+            <li>If the AI service fails, a rules-based backup answers instead and the workflow keeps running</li>
+            <li>28 automated tests, plus a labelled message set that measures accuracy with a number</li>
+            <li>Runs in Docker with automatic checks on every push, and plugs into n8n, Google Sheets and Gmail</li>
+          </ul>
+          <ul class="stack" aria-label="Built with">
+            <li>Python</li><li>FastAPI</li><li>Claude API</li><li>n8n</li><li>SQLite</li><li>Docker</li><li>GitHub Actions</li>
+          </ul>
+          <div class="links">
+            <a href="https://github.com/MartinezYT/inbox-to-action">Read the code</a>
+            <!-- After deploying on Render, add: <a href="https://YOUR-APP.onrender.com">Try the live demo</a> -->
+          </div>
+        </div>
+        <figure>
+          <img src="assets/inbox-dashboard.png" alt="Inbox-to-Action dashboard: a form to test a message on the left, and recent sorted messages with category, urgency and drafted replies on the right" width="1360" height="900" loading="lazy">
+          <figcaption>The demo dashboard. Paste in any message and see how it's sorted, or browse recent decisions.</figcaption>
+        </figure>
+      </article>
+
+      <article class="project">
+        <div>
+          <h3>Shopify order automation</h3>
+          <ul class="stack" aria-label="Built with">
+            <li>Shopify</li><li>n8n</li><li>AI</li>
+          </ul>
+        </div>
+        <div>
+          <p>For an e-commerce store, every order brings a run of small manual jobs: checking it, recording it, keeping the customer and the team updated. I built an automation that picks up each new Shopify order and handles those steps on its own, so the store owner only gets involved when something needs a decision.</p>
+          <div class="links">
+            <a href="https://www.linkedin.com/in/martin-vincent-8b3866269/recent-activity/all/">See the write-up on LinkedIn</a>
+          </div>
+        </div>
+      </article>
+
+      <div class="ledger">
+        <h3>Other workflows</h3>
+        <p>Smaller automations I've built and written about, mostly in n8n with Claude.</p>
+        <dl>
+          <div class="row"><dt>CV screening</dt><dd>Reads incoming job applications, scores them against the role and shortlists the best fits, so recruiters stop reading hundreds of CVs by hand.</dd></div>
+          <div class="row"><dt>Lead follow-up</dt><dd>Keeps in touch with new leads on a schedule, so nobody goes cold just because a follow-up was forgotten.</dd></div>
+          <div class="row"><dt>Instant customer replies</dt><dd>Replies to new enquiries within minutes, because a slow first reply often loses the sale.</dd></div>
+          <div class="row"><dt>Form response processing</dt><dd>Turns hundreds of Google Form responses into organised records and next steps, without anyone copying and pasting.</dd></div>
+          <div class="row"><dt>Exchange rate alerts</dt><dd>Sends the rates a business cares about on a schedule, so nobody has to keep checking several apps.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="method">
+    <div class="wrap">
+      <h2>How I work</h2>
+      <p class="intro">Every project follows the same four steps. Automation that nobody trusts doesn't get used, so the last two matter as much as the first two.</p>
+      <div class="steps">
+        <div class="step"><h3>Map the process</h3><p>Walk through how the work happens today and find the steps that eat the most time.</p></div>
+        <div class="step"><h3>Automate the slow parts</h3><p>Build with n8n, Python and Claude, and keep a person involved wherever a decision carries risk.</p></div>
+        <div class="step"><h3>Measure it</h3><p>Test it on real examples and check the AI's accuracy before anyone relies on it.</p></div>
+        <div class="step"><h3>Hand it over</h3><p>Document it, set up alerts for when something goes wrong, and make sure the team can run it without me.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap about">
+      <div>
+        <h2>From engines to agents</h2>
+        <p>I studied mechanical engineering, which taught me to look at a whole system, find the part that slows everything down, and fix it. A year ago I started applying that habit to businesses instead of machines.</p>
+        <p>Since then I've trained in AI automation and built workflows for e-commerce, recruiting and customer service. I'm now moving into full software development, writing tested, deployed services in Python alongside my n8n work.</p>
+      </div>
+      <dl class="facts">
+        <div><dt>Focus</dt><dd>AI agents and workflow automation</dd></div>
+        <div><dt>Toolkit</dt><dd>Python, FastAPI, Claude API, n8n, Lovable, REST APIs and webhooks, Google Workspace, Shopify, Git</dd></div>
+        <div><dt>Training</dt><dd>Nexith AI Automation Academy, Claude Academy</dd></div>
+        <div><dt>Education</dt><dd>Mechanical engineering</dd></div>
+        <div><dt>Based in</dt><dd>Nigeria, open to remote work</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <h2>Have a process that eats up your team's time?</h2>
+      <p>Tell me how it works today and I'll tell you what I'd automate first. I'm also open to developer roles on teams building AI products.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://www.linkedin.com/in/martin-vincent-8b3866269/">Message me on LinkedIn</a>
+        <a class="btn ghost" href="https://github.com/MartinezYT">See my GitHub</a>
+        <!-- Optional: <a class="btn ghost" href="mailto:you@example.com">you@example.com</a> -->
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Martin Emeka, 2026. Built by hand in HTML and CSS.</div>
+</footer>
+
+<script>
+  // Sample messages and the decisions Inbox-to-Action returned for them.
+  const SAMPLES = [
+    { from: "Amaka Obi via website form", msg: "We run a skincare brand in Lekki and need about 40 deliveries a week across Lagos. What are your rates? We'd like to start tomorrow.",
+      lane: "lead", cat: "Sales lead", urg: "High", extra: "Volume: 40 a week", next: "Send a quote today and add the lead to the CRM" },
+    { from: "bola.ade@yahoo.com via email", msg: "My package was supposed to arrive Monday and it's still not here. This is unacceptable. Tracking number LGS-55812.",
+      lane: "support", cat: "Support", urg: "High", extra: "Needs a person", next: "Check tracking LGS-55812 and send an update" },
+    { from: "Tolu, Stitch Lagos via WhatsApp", msg: "Good morning, I've made a transfer of N250,000 for last month's deliveries. Proof of payment attached.",
+      lane: "payment", cat: "Payment", urg: "Medium", extra: "NGN 250,000", next: "Match against the bank statement and update the ledger" },
+    { from: "winner@intl-lotto.biz via email", msg: "CONGRATULATIONS!!! You have won $1,000,000 in our international lottery. Click here to claim your prize.",
+      lane: "spam", cat: "Spam", urg: "Low", extra: "No reply", next: "Archive. The team isn't notified" },
+    { from: "Delta Foods procurement via email", msg: "Delta Foods is evaluating logistics partners for Q1. Kindly send your pricing for interstate haulage, Lagos to Abuja.",
+      lane: "lead", cat: "Sales lead", urg: "Medium", extra: "Company: Delta Foods", next: "Send interstate rates and book an intro call" },
+  ];
+  const COLORS = { lead: "var(--lead)", support: "var(--support)", payment: "var(--payment)", spam: "var(--spam)" };
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $ = (id) => document.getElementById(id);
+  const counts = { lead: 0, support: 0, payment: 0, spam: 0 };
+  let i = 0, paused = false, timer = null;
+
+  function tag(text, cls, color) {
+    const t = document.createElement("span");
+    t.className = "tag " + (cls || ""); t.textContent = text;
+    if (color) t.style.background = color;
+    return t;
+  }
+
+  function show(s, n) {
+    $("counter").textContent = "Message " + (n + 1) + " of " + SAMPLES.length;
+    $("from").textContent = s.from;
+    $("msg").textContent = s.msg;
+    const tags = $("tags"); tags.replaceChildren(tag(s.cat, "cat", COLORS[s.lane]), tag(s.urg + " urgency"), tag(s.extra));
+    $("next").textContent = "Next step: " + s.next;
+    counts[s.lane] += 1;
+    for (const k in counts) $("n-" + k).textContent = counts[k];
+    document.querySelectorAll(".lane").forEach(l => l.classList.toggle("lit", l.dataset.lane === s.lane));
+  }
+
+  function step() {
+    const s = SAMPLES[i % SAMPLES.length];
+    if (i > 0 && i % SAMPLES.length === 0) for (const k in counts) counts[k] = 0;
+    const n = i % SAMPLES.length;
+    i += 1;
+    if (reduce) { show(s, n); return; }
+    $("incoming").classList.add("out"); $("verdict").classList.add("out");
+    setTimeout(() => {
+      show(s, n);
+      $("incoming").classList.remove("out");
+      setTimeout(() => $("verdict").classList.remove("out"), 450);
+    }, 350);
+  }
+
+  function start() { timer = setInterval(step, 4200); }
+  const btn = $("pause");
+  step();
+  if (reduce) {
+    // No auto-advance for people who prefer reduced motion: they step through by hand.
+    btn.textContent = "Next message"; btn.removeAttribute("aria-pressed");
+    btn.addEventListener("click", step);
+  } else {
+    btn.addEventListener("click", () => {
+      paused = !paused;
+      btn.textContent = paused ? "Play" : "Pause";
+      btn.setAttribute("aria-pressed", String(paused));
+      if (paused) clearInterval(timer); else start();
+    });
+    start();
+  }
+</script>
+</body>
+</html>
